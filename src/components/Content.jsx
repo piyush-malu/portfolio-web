@@ -10,6 +10,7 @@ import { FaGithub } from "react-icons/fa";
 import { LuExternalLink } from "react-icons/lu";
 import GitHubCalendar from "react-github-calendar";
 import ReactTooltip from "react-tooltip";
+import Contact from "./Contact";
 
 const Content = () => {
   const lambdatestWorkEx = [
@@ -251,13 +252,16 @@ const Content = () => {
               <h1 className="text-3xl font-extrabold text-center">
                 Get in Touch
               </h1>
+              <div>
+                <Contact/>
+              </div>
               <div className="flex flex-col items-center justify-center space-y-5 sm:flex-row sm:space-x-5">
                 <a
                   href="https://www.linkedin.com/in/piyush-malu-915a1816b/"
                   target="_blank"
                 >
                   <button className="px-6 py-2 duration-300 bg-transparent border shadow-sm border-button-color shadow-button-color text-button-color hover:text-white hover:bg-button-color focus:bg-button-color focus:text-white active:bg-button-color active:text-white">
-                    Reach Out
+                    Reach Out via Linkedin
                   </button>
                 </a>
               </div>
