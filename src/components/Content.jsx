@@ -5,32 +5,15 @@ import soundCloud from "../assets/images/soundCloud.png";
 import Snazzy from "../assets/images/Snazzy.png";
 import MyInfo from "./MyInfo";
 import { motion } from "framer-motion";
-import { knownTechStack } from "../utils/constants";
+import { knownTechStack ,lambdatestWorkEx,soundCloudEx,snazzyWorkEx} from "../utils/constants";
 import { FaGithub } from "react-icons/fa";
 import { LuExternalLink } from "react-icons/lu";
 import GitHubCalendar from "react-github-calendar";
 import ReactTooltip from "react-tooltip";
 import Contact from "./Contact";
-
+import Lambdatest from "../assets/images/Lambdatest.svg";
+import snazzy from "../assets/images/snazzy.svg";
 const Content = () => {
-  const lambdatestWorkEx = [
-    "Led comprehensive revamp of analytics product using Primer design system, enhancing UI/UX.",
-    "Integrated Open Search with frontend, optimizing data retrieval and search functionality.",
-    "Redesigned charts platform, transitioning from Recharts to Ant Charts for improved performance.",
-    "Optimized data visualization, aligning with company’s commitment to user-friendly business intelligence tools.",
-    "Led end-to-end implementation of WCAG-compliant accessibility changes across the entire product, ensuring inclusive user experience and adherence to global accessibility standards",
-  ];
-
-  const snazzyWorkEx = [
-    "Worked on their website in the front-end team designing the website end to end.(internal frameworks, javascript)",
-    "Improved database queries and code improvements to increase performance and reduced latency by 25%",
-    "Revamped the entire code to React.js",
-  ];
-
-  const soundCloudEx = [
-    "Created a Local Sound Cloud Player and used APIs from SoundCloud.com.",
-    " Created a playlist button to add up songs and worked on the Front End part.The Search button searched all the songs  with that keyword present.",
-  ];
 
   return (
     <div className="flex-col flex-1 order-1 col-span-4 md:order-none">
@@ -80,8 +63,14 @@ const Content = () => {
           <div className="flex flex-col mt-12 space-y-12 transition-all duration-500 delay-300 translate-y-0 motion-reduce:transition-none opacity-1 blur-0">
             <div className="flex flex-col transition-opacity duration-500 lg:grid lg:grid-cols-2 lg:gap-x-4 motion-reduce:transition-none opacity-1">
               <div className="flex flex-col space-y-4 text-left">
-                <h3 className="pb-2 text-xl font-extrabold">
-                  LambdaTest - Jan 2022 - current
+                <h3 className="pb-2 text-xl font-extrabold flex center">
+                  <img
+                    src={Lambdatest}
+                    className="mr-1 "
+                    loading="lazy"
+                    alt="Lambdatest"
+                  />{" "}
+                  LambdaTest- Jan 2022 - present
                 </h3>
                 <ul className="list-disc pl-5 text-slate-500 dark:text-slate-300">
                   {lambdatestWorkEx.map((item, index) => (
@@ -128,7 +117,13 @@ const Content = () => {
                 </a>
               </div>
               <div className="flex flex-col space-y-4 lg:text-right">
-                <h3 className="pb-2 text-xl font-extrabold">
+                <h3 className="pb-2 text-xl font-extrabold flex center">
+                <img
+                    src={snazzy}
+                    className="mr-1 "
+                    loading="lazy"
+                    alt="snazzy"
+                  />{" "}
                   Snazzy Care - April 2021 - June 2021
                 </h3>
                 <ul className="list-disc pl-5 text-slate-500 dark:text-slate-300">
@@ -161,7 +156,7 @@ const Content = () => {
                   {soundCloudEx.map((item, index) => (
                     <li key={index}>{item}</li>
                   ))}
-                </ul> 
+                </ul>
                 <div className="flex items-center space-x-6 text-slate-400">
                   <a
                     href="https://github.com/piyush-malu/Sound-Cloud-Player"
@@ -208,7 +203,6 @@ const Content = () => {
             <div className="flex-grow border-t border-black dark:border-white border-1"></div>
           </div>
           <div className="transition-all duration-500 delay-300 translate-y-0 gap-y-4 xl:gap-x-5 xl:gap-y-0 mb-36 text-slate-500 dark:text-slate-300 motion-reduce:transition-none opacity-1 blur-0">
-
             <motion.div className="flex flex-wrap justify-between mt-8 text-sm font-medium text-black md:text-lg ">
               {knownTechStack.map((el, index) => (
                 <motion.div
@@ -253,7 +247,7 @@ const Content = () => {
                 Get in Touch
               </h1>
               <div>
-                <Contact/>
+                <Contact />
               </div>
               <div className="flex flex-col items-center justify-center space-y-5 sm:flex-row sm:space-x-5">
                 <a
