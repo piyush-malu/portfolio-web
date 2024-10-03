@@ -30,7 +30,6 @@ const Contact = () => {
 
   return (
     <div className="max-w-md mx-auto my-10 p-4 border rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
       {submitted ? (
         <p className="text-green-500">Thank you for contacting us!</p>
       ) : (
