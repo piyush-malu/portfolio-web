@@ -7,16 +7,13 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate asynchronous initialization (e.g., fetching data)
+    // Always start in dark mode for the new design
+    document.documentElement.classList.add("dark");
+
     const initializeApp = async () => {
       try {
-        // Set loading to true before initialization
         setIsLoading(true);
-
-        // Simulate initialization process
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // Set loading to false after initialization
+        await new Promise((resolve) => setTimeout(resolve, 1500));
       } catch (error) {
         console.error("Error initializing app:", error);
       } finally {
@@ -28,7 +25,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className="min-h-screen text-base bg-white overscroll-contain dark:bg-slate-900 dark:text-slate-300 md:text-xl">
+    <div className="min-h-screen bg-base text-slate-200 overflow-x-hidden">
       {isLoading ? (
         <Loading />
       ) : (

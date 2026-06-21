@@ -1,19 +1,19 @@
 export const knownTechStack = [
-  {
-    name: "C/C++",
-    link: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-plain.svg",
-  },
-  {
-    name: "React",
-    link: "https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg",
-  },
-  {
+    {
     name: "Javascript",
     link: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
   },
   {
     name: "TypeScript",
     link: "https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg",
+  },
+  {
+    name: "React",
+    link: "https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg",
+  },
+  {
+    name: "C/C++",
+    link: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-plain.svg",
   },
   {
     name: "Golang",

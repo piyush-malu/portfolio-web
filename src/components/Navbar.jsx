@@ -1,216 +1,144 @@
 import React, { useEffect, useState } from "react";
-
-import { PiMoonFill } from "react-icons/pi";
-import { IoSunny } from "react-icons/io5";
+import { motion, AnimatePresence } from "framer-motion";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross2 } from "react-icons/rx";
 
+const NAV_LINKS = [
+  { label: "About", href: "#about" },
+  { label: "Work", href: "#work" },
+  { label: "Skills", href: "#skills" },
+  { label: "Contact", href: "#contact" },
+];
+
 const Navbar = () => {
-  const [activeNav, setActiveNav] = useState("#");
-  const [theme, setTheme] = useState("light");
+  const [activeSection, setActiveSection] = useState("about");
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const [scrollingDown, setScrollingDown] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
+  // Track scroll for background blur
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-      if (scrollTop > 0 && !scrollingDown) {
-        setScrollingDown(true);
-      } else if (scrollTop === 0 && scrollingDown) {
-        setScrollingDown(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [scrollingDown]);
-
+  // IntersectionObserver to highlight active section
   useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
+    const sections = ["about", "work", "skills", "contact"];
+    const observers = sections.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
+        { rootMargin: "-40% 0px -55% 0px" }
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach((o) => o?.disconnect());
+  }, []);
 
-  const handleThemeSwitch = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  const closeNav = () => setIsNavOpen(false);
 
   return (
     <nav
-      className={`block w-full transition-all duration-300 sticky top-0 z-10 ${
-        scrollingDown ? "-translate-y-full absolute" : ""
-      }  `}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.4)]"
+          : "bg-transparent"
+      }`}
     >
-      {/* Big screen Nav */}
-      <div
-        className={`flex flex-wrap items-center justify-between px-9 md:py-4 bg-white/[.9] dark:bg-slate-900 backdrop-blur-sm transition-shadow duration-300 
-         ${scrollingDown ? "dark:bg-slate-900/[0.8] shadow-lg" : ""}
-        `}
-      >
-        <a href="#" onClick={() => setActiveNav("#")}>
-          <div className="transition-all duration-500 motion-reduce:transition-none opacity-1 blur-0">
-            <div>
-              <div className="flex items-center space-x-2 py-4 md:py-1 drop-shadow-lg bg-gradient-to-r from-[#fa3205] to-[#5301c5] bg-clip-text text-transparent">
-                <p>&lt;</p>
-                <p className="text-5xl md:text-7xl" id="custom-logo">
-                  P.M
-                </p>
-                <p>/&gt;</p>
-              </div>
-            </div>
+      <div className="max-w-6xl mx-auto px-6 lg:px-12 flex items-center justify-between h-16">
+        {/* Logo */}
+        <a href="#" onClick={closeNav}>
+          <div className="flex items-center space-x-1 bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-lg">
+            <span className="text-slate-400">&lt;</span>
+            <span className="text-4xl md:text-5xl" id="custom-logo">P.M</span>
+            <span className="text-slate-400">/&gt;</span>
           </div>
         </a>
-        <button
-          className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 transition-all duration-500 xl:hidden motion-reduce:transition-none opacity-1 blur-0"
-          onClick={() => {
-            setIsNavOpen(!isNavOpen);
-          }}
-        >
-          <div>
-            {isNavOpen ? (
-              <RxCross2 className="w-9 h-9 dark:fill-slate-300" />
-            ) : (
-              <RxHamburgerMenu className="w-9 h-9 dark:fill-slate-300" />
-            )}
-          </div>
-        </button>
 
-        <div
-          className="items-center hidden w-full xl:block xl:w-auto"
-          id="navbar-default"
-        >
-          <ul className="flex flex-col p-4 mt-4 font-medium xl:p-0 xl:flex-row xl:space-x-8 xl:mt-0">
-            <li className="transition-all motion-reduce:transition-none duration-500 delay-[50ms] translate-y-0 opacity-1">
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-1">
+          {NAV_LINKS.map(({ label, href }) => {
+            const id = href.replace("#", "");
+            const isActive = activeSection === id;
+            return (
               <a
-                href="#about"
-                className="block py-2 pl-3 pr-4 router-link-active router-link-exact-active hover:text-[#4305ba]"
-                onClick={() => setActiveNav("#about")}
+                key={href}
+                href={href}
+                className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                  isActive ? "text-violet-400" : "text-slate-400 hover:text-slate-200"
+                }`}
               >
-                About
-              </a>
-            </li>
-            <li className="transition-all motion-reduce:transition-none duration-500 delay-[150ms] translate-y-0 opacity-1">
-              <a
-                // aria-current="page"
-                href="#work"
-                className="router-link-active router-link-exact-active block py-2 pl-3 pr-4 hover:text-[#4305ba]"
-              >
-                Work
-              </a>
-            </li>
-            <li className="transition-all motion-reduce:transition-none duration-500 delay-[100ms] translate-y-0 opacity-1">
-              <a
-                // aria-current="page"
-                href="#skills"
-                className="router-link-active router-link-exact-active block py-2 pl-3 pr-4 hover:text-[#4305ba]"
-                onClick={() => setActiveNav("#experience")}
-              >
-                Skills
-              </a>
-            </li>
-            <li className="transition-all motion-reduce:transition-none duration-500 delay-[200ms] translate-y-0 opacity-1">
-              <a
-                // aria-current="page"
-                href="#contact"
-                className="router-link-active router-link-exact-active block py-2 pl-3 pr-4 hover:text-[#4305ba]"
-              >
-                Contact
-              </a>
-            </li>
-            <li className="transition-all motion-reduce:transition-none duration-500 delay-[250ms] translate-y-0 opacity-1">
-              <a
-                href="https://drive.google.com/file/d/1E6jzIC7hVsnoO5PQG5TD0LVDbHcn6h1f/view?usp=drive_link"
-                target="_blank"
-              >
-                <button className="block px-6 py-2 transition duration-300 ease-in-out bg-transparent border shadow-sm border-button-color shadow-button-color text-button-color hover:bg-button-color hover:text-white hover:dark:text-slate-300 focus:bg-button-color focus:text-white active:bg-button-color active:text-white">
-                  Resume
-                </button>
-              </a>
-            </li>
-            <li className="transition-all motion-reduce:transition-none duration-500 delay-[250ms] translate-y-0 opacity-1">
-              <button className="block py-2 " onClick={handleThemeSwitch}>
-                {theme === "light" ? (
-                  <IoSunny className="h-7 w-7 text-slate-300 hover:text-[#4305ba]" />
-                ) : (
-                  <PiMoonFill className="h-7 w-7 text-slate-300 hover:text-[#4305ba]" />
+                {isActive && (
+                  <motion.span
+                    layoutId="active-pill"
+                    className="absolute inset-0 rounded-lg bg-violet-500/10 border border-violet-500/20"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+                  />
                 )}
-              </button>
-            </li>
-          </ul>
+                <span className="relative">{label}</span>
+              </a>
+            );
+          })}
+          <a
+            href="https://drive.google.com/file/d/1E6jzIC7hVsnoO5PQG5TD0LVDbHcn6h1f/view?usp=drive_link"
+            target="_blank"
+            rel="noreferrer"
+            className="ml-4 px-5 py-2 text-sm font-medium rounded-lg border border-violet-500/40 text-violet-300 hover:bg-violet-500/10 hover:border-violet-500/70 transition-all duration-300"
+          >
+            Resume
+          </a>
         </div>
-      </div>
-      {/* Big screen Nav */}
 
-      {/* small screen Nav */}
-      <div
-        className={`block w-full absolute xl:hidden px-9 pb-4 bg-white/[.9] dark:bg-slate-900/[.9] backdrop-blur-sm ${
-          isNavOpen ? "dropdown-enter-active" : " dropdown-enter-from"
-        }`}
-      >
-        <ul>
-          <li>
-            <a
-              href="#about"
-              className="block py-5 router-link-active router-link-exact-active hover:text-[#4305ba]"
-            >
-              😎 About
-            </a>
-          </li>
-          <li>
-            <a
-              href="#experience"
-              className="block py-5 router-link-active router-link-exact-active hover:text-[#4305ba]"
-            >
-              🛡️ Experience
-            </a>
-          </li>
-          <li>
-            <a
-              href="#work"
-              className="block py-5 router-link-active router-link-exact-active hover:text-[#4305ba]"
-            >
-              💻 Work
-            </a>
-          </li>
-          <li>
-            <a
-              aria-current="page"
-              href="#contact"
-              className="block py-5 router-link-active router-link-exact-active hover:text-[#4305ba]"
-            >
-              📭 Contact
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://drive.google.com/file/d/1E6jzIC7hVsnoO5PQG5TD0LVDbHcn6h1f/view?usp=drive_link"
-              target="_blank"
-            >
-              <button className="block w-full px-6 py-2 mt-5 text-center text-white shadow-sm bg-button-color shadow-button-color focus:bg-button-color focus:text-white active:bg-button-color active:text-white">
-                Resume
-              </button>
-            </a>
-          </li>
-          <li>
-            <div className="block w-full py-2 mt-5 text-center">
-              <button className="block py-2" onClick={handleThemeSwitch}>
-                {theme === "light" ? (
-                  <IoSunny className="h-7 w-7 text-slate-300 hover:text-[#4305ba]" />
-                ) : (
-                  <PiMoonFill className="h-7 w-7 text-slate-400 hover:text-[#4305ba]" />
-                )}
-              </button>
-            </div>
-          </li>
-        </ul>
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden p-2 text-slate-400 hover:text-slate-200 transition-colors"
+          onClick={() => setIsNavOpen(!isNavOpen)}
+          aria-label="Toggle menu"
+        >
+          {isNavOpen ? <RxCross2 className="w-6 h-6" /> : <RxHamburgerMenu className="w-6 h-6" />}
+        </button>
       </div>
-      {/* Big screen Nav */}
+
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {isNavOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden bg-[#0a0a0f]/95 backdrop-blur-xl border-b border-white/5 px-6 pb-6"
+          >
+            <ul className="space-y-1 pt-2">
+              {NAV_LINKS.map(({ label, href }) => (
+                <li key={href}>
+                  <a
+                    href={href}
+                    onClick={closeNav}
+                    className="block py-3 px-4 rounded-lg text-slate-300 hover:text-violet-400 hover:bg-violet-500/10 transition-all duration-200"
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+              <li className="pt-2">
+                <a
+                  href="https://drive.google.com/file/d/1E6jzIC7hVsnoO5PQG5TD0LVDbHcn6h1f/view?usp=drive_link"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={closeNav}
+                  className="block w-full text-center py-3 rounded-lg border border-violet-500/40 text-violet-300 hover:bg-violet-500/10 transition-all duration-300 text-sm font-medium"
+                >
+                  Resume ↗
+                </a>
+              </li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
